@@ -6,9 +6,8 @@ export const db = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASS || 'admin',
-  database: process.env.DB_NAME || 'BCDMyWebReceitas',
+  database: process.env.DB_NAME || 'receitas_db',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
-
