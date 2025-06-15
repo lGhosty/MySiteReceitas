@@ -4,8 +4,9 @@
   "description": "Projeto de cadastro de receitas culinárias com front-end, back-end em TypeScript e banco de dados MySQL.",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
-  },
+  "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+  "build": "tsc"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lGhosty/MySiteReceitas.git"
