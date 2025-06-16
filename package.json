@@ -1,0 +1,26 @@
+{
+  "name": "mysitereceitas",
+  "version": "1.0.0",
+  "description": "Projeto de cadastro de receitas culinárias com front-end, back-end em TypeScript e banco de dados MySQL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lGhosty/MySiteReceitas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lGhosty/MySiteReceitas/issues"
+  },
+  "homepage": "https://github.com/lGhosty/MySiteReceitas#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1"
+  }
+}
