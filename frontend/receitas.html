@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Minhas Receitas - MySiteReceitas</title>
+</head>
+<body>
+  <h1>Minhas Receitas</h1>
+  <button id="logout">Sair</button>
+  <button onclick="window.location.href='cadastro.html'">Nova Receita</button>
+  <ul id="listaReceitas"></ul>
+  <script>
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (!usuario) {
+      window.location.href = 'index.html';
+    }
+    document.getElementById('logout').addEventListener('click', () => {
+      localStorage.removeItem('usuario');
+      window.location.href = 'index.html';
+    });
+    async function carregarReceitas() {
+      try {
+        const res = await fetch(`http://localhost:3000/receitas?usuario_id=${usuario.id}`);
+        const lista = await res.json();
+        const ul = document.getElementById('listaReceitas');
+        ul.innerHTML = '';
+        if (!lista.length) {
+          ul.innerHTML = '<li>Nenhuma receita cadastrada</li>';
+          return;
+        }
+        lista.forEach(r => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${r.titulo}</strong> (${r.categoria})<br>
+                          Ingredientes: ${r.ingredientes}<br>
+                          Preparo: ${r.modo_preparo}
+                          <button onclick="editar(${r.id})">Editar</button>
+                          <button onclick="remover(${r.id})">Excluir</button>`;
+          ul.appendChild(li);
+        });
+      } catch {
+        alert('Erro ao carregar receitas');
+      }
+    }
+    function editar(id) {
+      const novoTitulo = prompt('Novo título:');
+      if (novoTitulo) {
+        fetch(`http://localhost:3000/receitas/${id}`, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ titulo: novoTitulo })
+        }).then(res => {
+          if (!res.ok) {
+            res.json().then(err => alert(err.message));
+          } else {
+            alert('Receita atualizada');
+            carregarReceitas();
+          }
+        }).catch(() => alert('Erro na atualização'));
+      }
+    }
+    function remover(id) {
+      if (confirm('Confirma exclusão?')) {
+        fetch(`http://localhost:3000/receitas/${id}`, {
+          method: 'DELETE'
+        }).then(res => {
+          if (!res.ok) {
+            res.json().then(err => alert(err.message));
+          } else {
+            alert('Receita removida');
+            carregarReceitas();
+          }
+        }).catch(() => alert('Erro na exclusão'));
+      }
+    }
+    carregarReceitas();
+  </script>
+</body>
+</html>

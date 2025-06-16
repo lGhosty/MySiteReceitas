@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova Receita - MySiteReceitas</title>
+</head>
+<body>
+  <h1>Cadastrar Nova Receita</h1>
+  <form id="receitaForm">
+    <input type="text" id="titulo" placeholder="Título" required><br>
+    <textarea id="ingredientes" placeholder="Ingredientes" required></textarea><br>
+    <textarea id="modo_preparo" placeholder="Modo de preparo" required></textarea><br>
+    <select id="categoria"></select><br>
+    <button type="submit">Cadastrar</button>
+    <button type="button" id="btnVoltar">Voltar</button>
+  </form>
+  <script>
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (!usuario) {
+      window.location.href = 'index.html';
+    }
+    document.getElementById('btnVoltar').addEventListener('click', () => {
+      window.location.href = 'receitas.html';
+    });
+    async function carregarCategorias() {
+      try {
+        const res = await fetch('http://localhost:3000/categorias');
+        const cats = await res.json();
+        const sel = document.getElementById('categoria');
+        cats.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.nome;
+          sel.appendChild(opt);
+        });
+      } catch {
+        alert('Erro ao carregar categorias');
+      }
+    }
+    document.getElementById('receitaForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const receita = {
+        titulo: document.getElementById('titulo').value,
+        ingredientes: document.getElementById('ingredientes').value,
+        modo_preparo: document.getElementById('modo_preparo').value,
+        categoria_id: Number(document.getElementById('categoria').value),
+        usuario_id: usuario.id
+      };
+      try {
+        const res = await fetch('http://localhost:3000/receitas', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(receita)
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          alert(err.message);
+          return;
+        }
+        alert('Receita cadastrada');
+        window.location.href = 'receitas.html';
+      } catch {
+        alert('Erro de conexão');
+      }
+    });
+    carregarCategorias();
+  </script>
+</body>
+</html>
