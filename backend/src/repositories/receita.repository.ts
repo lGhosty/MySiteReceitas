@@ -29,19 +29,25 @@ export const listarReceitasPorUsuario = async (usuario_id: number): Promise<(Rec
 };
 
 export const atualizarReceita = async (id: number, receita: Partial<Receita>): Promise<void> => {
+  const { titulo, ingredientes, modo_preparo, categoria_id } = receita;
+
+  if (
+    typeof titulo === 'undefined' ||
+    typeof ingredientes === 'undefined' ||
+    typeof modo_preparo === 'undefined' ||
+    typeof categoria_id === 'undefined'
+  ) {
+    throw new Error('Todos os campos da receita devem ser informados para atualizar.');
+  }
+
   const sql = `
     UPDATE receitas
     SET titulo = ?, ingredientes = ?, modo_preparo = ?, categoria_id = ?
     WHERE id = ?
   `;
-  await db.execute(sql, [
-    receita.titulo,
-    receita.ingredientes,
-    receita.modo_preparo,
-    receita.categoria_id,
-    id
-  ]);
+  await db.execute(sql, [titulo, ingredientes, modo_preparo, categoria_id, id]);
 };
+
 
 export const deletarReceita = async (id: number): Promise<void> => {
   const sql = 'DELETE FROM receitas WHERE id = ?';
