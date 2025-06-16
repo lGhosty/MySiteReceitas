@@ -1,0 +1,5 @@
+SHOW DATABASES;
+USE BCDMyWebReceitas;
+SHOW TABLES;
+SELECT * FROM categorias;
+
